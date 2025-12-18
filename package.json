@@ -1,7 +1,7 @@
 {
   "name": "@valuinn/radikari-chat-widget",
   "private": false,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A portable, non-invasive RAG chatbot web component for Radikari LMS",
   "type": "module",
   "main": "dist/umd/radikari-chat.umd.js",
