@@ -1,19 +1,49 @@
 {
   "name": "radikari-chat-widget",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A portable, non-invasive RAG chatbot web component for Radikari LMS",
   "type": "module",
+  "main": "dist/radikari-chat.js",
+  "types": "dist/radikari-chat.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build:es": "tsc && vite build",
+    "build:umd": "tsc && vite build --mode umd",
+    "build:prod": "bun run build:es && bun run build:umd",
+    "preview": "vite preview",
+    "version": "bun version",
+    "release": "bun run build:prod && bun publish",
+    "release:patch": "node scripts/release.js patch",
+    "release:minor": "node scripts/release.js minor",
+    "release:major": "node scripts/release.js major",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "web-components",
+    "lit",
+    "chatbot",
+    "rag",
+    "widget",
+    "typescript"
+  ],
+  "author": "Radikari Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/radikari/radikari-chat-widget.git"
   },
   "dependencies": {
     "lit": "^3.3.1"
   },
   "devDependencies": {
     "typescript": "~5.9.3",
-    "vite": "npm:rolldown-vite@7.2.5"
+    "vite": "npm:rolldown-vite@7.2.5",
+    "@types/node": "^25.0.3"
   },
   "overrides": {
     "vite": "npm:rolldown-vite@7.2.5"

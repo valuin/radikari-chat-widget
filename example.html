@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Radikari Chat Widget - Production Example</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          sans-serif;
+        background: #f0f2f5;
+      }
+      .demo-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .demo-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+      .demo-header h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+      }
+      .demo-header p {
+        margin: 8px 0 0 0;
+        opacity: 0.9;
+        font-size: 14px;
+      }
+      .demo-content {
+        padding: 20px;
+        min-height: 400px;
+      }
+      .integration-info {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 20px;
+        border-left: 4px solid #667eea;
+      }
+      .integration-info h3 {
+        margin: 0 0 8px 0;
+        color: #333;
+        font-size: 16px;
+      }
+      .integration-info code {
+        background: #fff;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: "Monaco", "Menlo", monospace;
+        font-size: 13px;
+        border: 1px solid #e1e5e9;
+      }
+      .widget-container {
+        border: 2px dashed #e1e5e9;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fafbfc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-container">
+      <div class="demo-header">
+        <h1>Radikari Chat Widget</h1>
+        <p>Production-ready RAG chatbot component</p>
+      </div>
+
+      <div class="demo-content">
+        <div class="integration-info">
+          <h3>Integration Instructions</h3>
+
+          <h4>Option 1: ESM (Modern browsers - Recommended)</h4>
+          <pre><code><script type="module" src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.es.js"></script>
+<radikari-chat
+  tenant-id="YOUR_TENANT_ID"
+  api-base-url="https://your-api.com"
+  inline></radikari-chat></code></pre>
+          <p>
+            <strong>Note:</strong> Requires browsers with ES modules support.
+            Lit is loaded as an external dependency.
+          </p>
+
+          <h4>Option 2: UMD (Legacy browsers - All-in-one)</h4>
+          <pre><code><script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
+<radikari-chat
+  tenant-id="YOUR_TENANT_ID"
+  api-base-url="https://your-api.com"
+  inline></radikari-chat></code></pre>
+          <p>
+            <strong>Note:</strong> Includes Lit bundled. Larger file size but no
+            external dependencies.
+          </p>
+
+          <h4>Option 3: UMD with External Lit (Optimized)</h4>
+          <pre><code><script src="https://unpkg.com/lit@3/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
+<radikari-chat
+  tenant-id="YOUR_TENANT_ID"
+  api-base-url="https://your-api.com"
+  inline></radikari-chat></code></pre>
+          <p>
+            <strong>Note:</strong> Smaller widget size but requires Lit to be
+            loaded first.
+          </p>
+        </div>
+
+        <div class="widget-container">
+          <radikari-chat
+            tenant-id="01K9201Z97H20E4NKTEANCFVCP"
+            api-base-url="https://your-api-domain.com"
+            inline
+          ></radikari-chat>
+        </div>
+      </div>
+    </div>
+
+    <!-- Production Build -->
+
+    <!-- Option 1: ESM (Modern browsers) - Lit is external -->
+    <script type="module" src="./dist/radikari-chat.es.js"></script>
+
+    <!-- Option 2: UMD (Legacy browsers) - Lit is bundled, no external dependency needed -->
+    <!-- <script src="./dist/radikari-chat.umd.js"></script> -->
+
+    <!-- Option 3: UMD with external Lit (if you prefer smaller bundle) -->
+    <!--
+    <script src="https://unpkg.com/lit@3/index.js"></script>
+    <script src="./dist/radikari-chat.umd.js"></script>
+    -->
+  </body>
+</html>
