@@ -81,10 +81,10 @@
           <h3>Integration Instructions</h3>
 
           <h4>Option 1: ESM (Modern browsers - Recommended)</h4>
-          <pre><code><script type="module" src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.es.js"></script>
+          <pre><code><script type="module" src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.es.js"></script>
 <radikari-chat
-  tenant-id="YOUR_TENANT_ID"
-  api-base-url="https://your-api.com"
+  tenant-id="01K9201Z97H20E4NKTEANCFVCP"
+  api-base-url="http://localhost:3010"
   inline></radikari-chat></code></pre>
           <p>
             <strong>Note:</strong> Requires browsers with ES modules support.
@@ -92,10 +92,10 @@
           </p>
 
           <h4>Option 2: UMD (Legacy browsers - All-in-one)</h4>
-          <pre><code><script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
+          <pre><code><script src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
 <radikari-chat
-  tenant-id="YOUR_TENANT_ID"
-  api-base-url="https://your-api.com"
+  tenant-id="01K9201Z97H20E4NKTEANCFVCP"
+  api-base-url="http://localhost:3010"
   inline></radikari-chat></code></pre>
           <p>
             <strong>Note:</strong> Includes Lit bundled. Larger file size but no
@@ -104,10 +104,10 @@
 
           <h4>Option 3: UMD with External Lit (Optimized)</h4>
           <pre><code><script src="https://unpkg.com/lit@3/index.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
 <radikari-chat
-  tenant-id="YOUR_TENANT_ID"
-  api-base-url="https://your-api.com"
+  tenant-id="01K9201Z97H20E4NKTEANCFVCP"
+  api-base-url="http://localhost:3010"
   inline></radikari-chat></code></pre>
           <p>
             <strong>Note:</strong> Smaller widget size but requires Lit to be
@@ -118,7 +118,7 @@
         <div class="widget-container">
           <radikari-chat
             tenant-id="01K9201Z97H20E4NKTEANCFVCP"
-            api-base-url="https://your-api-domain.com"
+            api-base-url="http://localhost:3010"
             inline
           ></radikari-chat>
         </div>
@@ -128,10 +128,10 @@
     <!-- Production Build -->
 
     <!-- Option 1: ESM (Modern browsers) - Lit is external -->
-    <script type="module" src="./dist/radikari-chat.es.js"></script>
+    <!-- <script type="module" src="./dist/radikari-chat.es.js"></script> -->
 
     <!-- Option 2: UMD (Legacy browsers) - Lit is bundled, no external dependency needed -->
-    <!-- <script src="./dist/radikari-chat.umd.js"></script> -->
+    <script src="./dist/radikari-chat.umd.js"></script>
 
     <!-- Option 3: UMD with external Lit (if you prefer smaller bundle) -->
     <!--

@@ -1,10 +1,11 @@
 {
-  "name": "radikari-chat-widget",
-  "private": true,
+  "name": "@valuinn/radikari-chat-widget",
+  "private": false,
   "version": "1.0.0",
   "description": "A portable, non-invasive RAG chatbot web component for Radikari LMS",
   "type": "module",
-  "main": "dist/radikari-chat.js",
+  "main": "dist/umd/radikari-chat.umd.js",
+  "module": "dist/esm/radikari-chat.es.js",
   "types": "dist/radikari-chat.d.ts",
   "files": [
     "dist"
@@ -14,13 +15,15 @@
     "build": "tsc && vite build",
     "build:es": "tsc && vite build",
     "build:umd": "tsc && vite build --mode umd",
-    "build:prod": "bun run build:es && bun run build:umd",
+    "build:prod": "bun run build:es && bun run build:umd && bun run copy-files",
+    "copy-files": "node scripts/copy-files.js",
     "preview": "vite preview",
     "version": "bun version",
     "release": "bun run build:prod && bun publish",
     "release:patch": "node scripts/release.js patch",
     "release:minor": "node scripts/release.js minor",
     "release:major": "node scripts/release.js major",
+    "deploy": "node scripts/deploy.js",
     "test": "echo \"No tests yet\" && exit 0"
   },
   "keywords": [
@@ -35,7 +38,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/radikari/radikari-chat-widget.git"
+    "url": "git+https://github.com/radikari/radikari-chat-widget.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "lit": "^3.3.1"
@@ -43,7 +49,8 @@
   "devDependencies": {
     "typescript": "~5.9.3",
     "vite": "npm:rolldown-vite@7.2.5",
-    "@types/node": "^25.0.3"
+    "@types/node": "^25.0.3",
+    "terser": "^5.34.1"
   },
   "overrides": {
     "vite": "npm:rolldown-vite@7.2.5"

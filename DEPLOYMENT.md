@@ -26,8 +26,13 @@ npm run dev
 npm run build:prod
 
 # Or build separately
-npm run build          # ES modules
+npm run build:es       # ES modules
 npm run build:umd      # UMD for legacy browsers
+```
+
+**Note**: The build process uses Terser for minification. It's included as a dev dependency, but if you encounter build errors, ensure it's installed:
+```bash
+npm install --save-dev terser
 ```
 
 ### Build Outputs

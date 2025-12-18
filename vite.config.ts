@@ -34,15 +34,18 @@ const esmConfig: UserConfig = {
   ...baseConfig,
   build: {
     ...baseConfig.build!,
+    outDir: "dist/esm", // Separate output directory
     lib: {
-      entry: resolve(__dirname, "src/radikari-chat.ts"),
-      fileName: "radikari-chat.es.js",
+      entry: resolve(__dirname, "src/main.ts"),
+      fileName: () => "radikari-chat.es.js",
       formats: ["es"],
     },
     rollupOptions: {
       external: ["lit"],
       output: {
-        // No globals for ESM - users will import Lit
+        entryFileNames: "radikari-chat.es.js",
+        chunkFileNames: "radikari-chat.es-[name].js",
+        assetFileNames: "radikari-chat.es-[extname]",
       },
     },
   },
@@ -53,15 +56,21 @@ const umdConfig: UserConfig = {
   ...baseConfig,
   build: {
     ...baseConfig.build!,
+    outDir: "dist/umd", // Separate output directory
     lib: {
-      entry: resolve(__dirname, "src/radikari-chat.ts"),
+      entry: resolve(__dirname, "src/main.ts"),
       name: "RadikariChat", // Global name for UMD (mostly irrelevant for web components)
-      fileName: "radikari-chat.umd.js",
+      fileName: () => "radikari-chat.umd.js",
       formats: ["umd"],
     },
     rollupOptions: {
       // Bundle Lit for UMD to prevent runtime failures
       // No external dependencies - everything is bundled
+      output: {
+        entryFileNames: "radikari-chat.umd.js",
+        chunkFileNames: "radikari-chat.umd-[name].js",
+        assetFileNames: "radikari-chat.umd-[extname]",
+      },
     },
   },
 };

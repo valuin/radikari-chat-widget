@@ -22,7 +22,7 @@ export class RadikariChat extends LitElement {
   @state() private isOpen = false;
   @state() private inputValue = "";
 
-  @query("textarea") private textarea!: HTMLTextAreaElement;
+  @query("textarea") private!: HTMLTextAreaElement;
 
   private abortController: AbortController | null = null;
 
