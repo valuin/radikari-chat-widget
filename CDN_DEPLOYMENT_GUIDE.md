@@ -19,19 +19,19 @@ Once published, your widget is immediately available via:
 **jsDelivr (Recommended):**
 ```html
 <!-- ESM Version -->
-<script type="module" src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.es.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.es.js"></script>
 
 <!-- UMD Version -->
-<script src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
 ```
 
 **unpkg:**
 ```html
 <!-- ESM Version -->
-<script type="module" src="https://unpkg.com/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.es.js"></script>
+<script type="module" src="https://unpkg.com/radikari-chat-widget@1.0.0/dist/radikari-chat.es.js"></script>
 
 <!-- UMD Version -->
-<script src="https://unpkg.com/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
+<script src="https://unpkg.com/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
 ```
 
 ## Alternative: GitHub Pages (Free Hosting)
@@ -130,13 +130,13 @@ npm publish
 ### Using Specific Versions
 ```html
 <!-- Latest version -->
-<script src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget/dist/radikari-chat.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget/dist/radikari-chat.umd.js"></script>
 
 <!-- Specific version -->
-<script src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
 
 <!-- Latest patch of version 1.0.x -->
-<script src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0/dist/radikari-chat.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0/dist/radikari-chat.umd.js"></script>
 ```
 
 ## Integration Examples
@@ -156,7 +156,7 @@ npm publish
     ></radikari-chat>
 
     <!-- Load the widget -->
-    <script src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
 </body>
 </html>
 ```
@@ -201,7 +201,7 @@ npm publish
         // Load widget with error handling
         function loadWidget() {
             const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js';
+            script.src = 'https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js';
             script.onload = function() {
                 console.log('Radikari Chat Widget loaded successfully');
             };
@@ -230,13 +230,13 @@ npm publish
 ```html
 <head>
     <!-- Preload widget for faster loading -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js" as="script">
 </head>
 ```
 
 ### Use Subresource Integrity (SRI)
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"
+<script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"
         integrity="sha384-YOUR_SRI_HASH"
         crossorigin="anonymous"></script>
 ```
@@ -265,7 +265,7 @@ npm publish
 // Enable debug mode
 window.RADIKARI_DEBUG = true;
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"></script>
 ```
 
 ## Next Steps

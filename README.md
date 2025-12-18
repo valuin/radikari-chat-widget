@@ -18,12 +18,12 @@ A portable, non-invasive RAG chatbot web component for Radikari LMS.
 
 #### UMD (Recommended for Compatibility)
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@latest/dist/radikari-chat.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@latest/dist/radikari-chat.umd.js"></script>
 ```
 
 #### ESM (Modern browsers)
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@latest/dist/radikari-chat.es.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@latest/dist/radikari-chat.es.js"></script>
 ```
 *Loads Lit as external dependency - automatic in modern browsers*
 
@@ -31,12 +31,12 @@ A portable, non-invasive RAG chatbot web component for Radikari LMS.
 
 ### NPM
 ```bash
-npm install @valuinn/radikari-chat-widget
+npm install radikari-chat-widget
 ```
 
 ### Yarn
 ```bash
-yarn add @valuinn/radikari-chat-widget
+yarn add radikari-chat-widget
 ```
 
 ## 🔧 Quick Start
@@ -46,7 +46,7 @@ yarn add @valuinn/radikari-chat-widget
 <html>
 <head>
     <!-- Use @latest for latest features or @1.0.1 for stability -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@valuinn/radikari-chat-widget@latest/dist/radikari-chat.es.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@latest/dist/radikari-chat.es.js"></script>
 </head>
 <body>
     <radikari-chat
