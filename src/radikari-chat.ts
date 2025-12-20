@@ -19,6 +19,8 @@ export class RadikariChat extends LitElement {
   @state() private isStreaming = false;
   @state() private error: string | null = null;
   @state() private isOpen = false;
+  @state() private isEntering = false;
+  @state() private isExpanded = false;
   @state() private inputValue = "";
 
   // Internal API base URL - not exposed as a prop
@@ -33,7 +35,7 @@ export class RadikariChat extends LitElement {
       : "https://radikari-be.withsummon.com";
   }
 
-  @query("textarea") private!: HTMLTextAreaElement;
+  @query("textarea") private textarea!: HTMLTextAreaElement;
 
   private abortController: AbortController | null = null;
 
@@ -45,6 +47,11 @@ export class RadikariChat extends LitElement {
       inline: this.inline,
     });
     this.isOpen = this.inline;
+
+    // Simulate the 'enter' animation from codepen
+    setTimeout(() => {
+      this.isEntering = true;
+    }, 1000);
   }
 
   disconnectedCallback() {
@@ -54,7 +61,27 @@ export class RadikariChat extends LitElement {
 
   private _toggleChat() {
     if (this.inline) return;
-    this.isOpen = !this.isOpen;
+    if (this.isExpanded) {
+      this._closeChat();
+    } else {
+      this._openChat();
+    }
+  }
+
+  private _openChat() {
+    this.isExpanded = true;
+    this.isOpen = true;
+    setTimeout(() => {
+      this.textarea?.focus();
+    }, 250);
+  }
+
+  private _closeChat() {
+    this.isExpanded = false;
+    // Delay setting isOpen to false to allow exit animation if any
+    setTimeout(() => {
+      this.isOpen = false;
+    }, 250);
   }
 
   private _handleInput(e: InputEvent) {
@@ -212,46 +239,114 @@ export class RadikariChat extends LitElement {
   }
 
   render() {
-    console.log("RadikariChat: render method called. isOpen:", this.isOpen);
+    const isFloating = !this.inline;
     return html`
       <div
-        class="wrapper ${this.isOpen ? "open" : ""} ${this.inline
-          ? "inline"
-          : "floating"}"
+        class="floating-chat ${this.isEntering ? "enter" : ""} ${this.isExpanded
+          ? "expand"
+          : ""} ${this.inline ? "inline" : ""}"
       >
-        ${!this.inline
+        ${isFloating && !this.isExpanded
           ? html`
-              <button class="trigger" @click=${this._toggleChat}>
-                ${this.isOpen ? "✕" : "💬"}
-              </button>
+              <div class="trigger-icon" @click=${this._toggleChat}>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                  ></path>
+                </svg>
+              </div>
             `
           : ""}
 
-        <div class="container">
+        <div class="chat ${this.isExpanded || this.inline ? "enter" : ""}">
           <div class="header">
-            <h3>Radikari Assistant</h3>
+            <span class="title">Radikari Assistant</span>
+            ${isFloating
+              ? html`
+                  <button @click=${this._closeChat}>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                `
+              : ""}
           </div>
 
-          <div class="messages" id="scroll-target">
+          <ul class="messages">
             ${this.messages.length === 0
               ? html`
-                  <div class="empty">Apa yang bisa saya bantu hari ini?</div>
+                  <li class="empty">Apa yang bisa saya bantu hari ini?</li>
                 `
               : ""}
             ${this.messages.map(
               (m) => html`
-                <div class="message ${m.role}">
-                  <div class="bubble">
+                <li class="${m.role === "user" ? "self" : "other"}">
+                  <div class="avatar">
+                    ${m.role === "user"
+                      ? html`
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                            ></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                          </svg>
+                        `
+                      : html`
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <rect
+                              x="3"
+                              y="11"
+                              width="18"
+                              height="10"
+                              rx="2"
+                            ></rect>
+                            <circle cx="12" cy="5" r="2"></circle>
+                            <path d="M12 7v4"></path>
+                            <line x1="8" y1="16" x2="8" y2="16"></line>
+                            <line x1="16" y1="16" x2="16" y2="16"></line>
+                          </svg>
+                        `}
+                  </div>
+                  <div class="content">
                     ${m.content ||
                     (this.isStreaming && m.role === "assistant" ? "..." : "")}
                   </div>
-                </div>
+                </li>
               `
             )}
-            ${this.error ? html`<div class="error">${this.error}</div>` : ""}
-          </div>
+            ${this.error ? html`<li class="error">${this.error}</li>` : ""}
+          </ul>
 
-          <div class="input-area">
+          <div class="footer">
             <textarea
               placeholder="Ketik pesan..."
               .value=${this.inputValue}
@@ -260,7 +355,7 @@ export class RadikariChat extends LitElement {
               ?disabled=${this.isStreaming}
             ></textarea>
             <button
-              class="send"
+              id="sendMessage"
               @click=${this._sendMessage}
               ?disabled=${this.isStreaming || !this.inputValue.trim()}
             >
@@ -275,198 +370,297 @@ export class RadikariChat extends LitElement {
   static styles = [
     themeTokens,
     css`
+      @import url("https://fonts.googleapis.com/css?family=Noto+Sans");
+
       :host {
-        --radikari-text: #1a1a1a;
-        --radikari-radius: 12px;
-        font-family: var(--radikari-font);
+        --chat-thread-bgd-color: rgba(25, 147, 147, 0.2);
+        --chat-thread-avatar-size: 25px;
+        --chat-thread-offset: 45px;
+        --radikari-accent-rgb: 25, 147, 147;
+        font-family: "Noto Sans", sans-serif;
         display: block;
         z-index: 9999;
-        /* Ensure host has dimensions in inline mode */
-        min-height: var(--radikari-min-height, auto);
       }
 
-      .wrapper {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
+      * {
+        box-sizing: border-box;
       }
 
-      .wrapper.floating {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: auto;
-        height: auto;
-      }
-
-      .trigger {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: var(--radikari-accent);
-        color: white;
-        border: none;
+      .floating-chat {
         cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        font-size: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: transform 0.2s;
+        color: white;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        transform: translateY(70px);
+        transition: all 250ms ease-out;
+        border-radius: 50%;
+        opacity: 0;
+        background: linear-gradient(
+          -45deg,
+          #183850 0,
+          #183850 25%,
+          #192c46 50%,
+          #22254c 75%,
+          #22254c 100%
+        );
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12),
+          0px 1px 2px rgba(0, 0, 0, 0.14);
       }
 
-      .trigger:hover {
-        transform: scale(1.05);
-      }
-
-      .container {
-        display: none;
-        width: 360px;
+      .floating-chat.inline {
+        position: relative;
+        bottom: 0;
+        right: 0;
+        transform: none;
+        opacity: 1;
+        width: 100%;
         height: 500px;
-        background: var(--radikari-bg);
-        border-radius: var(--radikari-radius);
-        flex-direction: column;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        overflow: hidden;
-        border: 1px solid #eee;
-        /* Ensure fixed size in floating mode */
-        max-width: 360px;
+        border-radius: 12px;
+        cursor: auto;
+      }
+
+      .floating-chat.enter {
+        transform: translateY(0);
+        opacity: 0.6;
+      }
+
+      .floating-chat.enter:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+          0 6px 6px rgba(0, 0, 0, 0.23);
+        opacity: 1;
+      }
+
+      .floating-chat.expand {
+        width: 360px;
         max-height: 500px;
-        min-width: 360px;
-        min-height: 500px;
+        height: 500px;
+        border-radius: 12px;
+        cursor: auto;
+        opacity: 1;
       }
 
-      .wrapper.open .container {
+      .trigger-icon {
         display: flex;
-      }
-      .wrapper.inline {
-        min-height: 500px; /* Default height for inline testing */
-      }
-
-      .wrapper.inline .container {
-        display: flex;
-        box-shadow: none;
-        border: 1px solid #eee;
+        align-items: center;
+        justify-content: center;
         width: 100%;
         height: 100%;
-        max-width: none;
-        max-height: none;
-        min-width: auto;
-        min-height: auto;
-        flex: 1; /* Take all available space in the wrapper */
+      }
+
+      .chat {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        transition: all 250ms ease-out;
+      }
+
+      .chat.enter {
+        display: flex;
       }
 
       .header {
-        padding: 16px;
-        background: var(--radikari-accent);
-        color: white;
+        flex-shrink: 0;
+        padding-bottom: 10px;
+        display: flex;
+        align-items: center;
+        background: transparent;
       }
 
-      .header h3 {
-        margin: 0;
-        font-size: 16px;
+      .header .title {
+        flex-grow: 1;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+        padding: 0 5px;
+      }
+
+      .header button {
+        background: transparent;
+        border: 0;
+        color: white;
+        cursor: pointer;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .messages {
-        flex: 1;
-        padding: 16px;
-        overflow-y: auto;
+        padding: 10px;
+        margin: 0;
+        list-style: none;
+        overflow-y: scroll;
         overflow-x: hidden;
+        flex-grow: 1;
+        border-radius: 4px;
+        background: transparent;
         display: flex;
         flex-direction: column;
-        gap: var(--_msg-gap);
-        background: #f9f9f9;
-        /* Ensure messages container has a defined height for scrolling */
-        max-height: calc(
-          500px - 120px
-        ); /* container height minus header and input area */
       }
 
-      .wrapper.inline .messages {
-        max-height: none; /* Remove max-height constraint in inline mode */
+      /* Custom Scrollbar */
+      .messages::-webkit-scrollbar {
+        width: 5px;
+      }
+      .messages::-webkit-scrollbar-track {
+        border-radius: 5px;
+        background-color: rgba(25, 147, 147, 0.1);
+      }
+      .messages::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: var(--chat-thread-bgd-color);
+      }
+
+      .messages li {
+        position: relative;
+        clear: both;
+        display: flex;
+        padding: 12px;
+        margin: 0 0 25px 0;
+        font-size: 12px;
+        line-height: 1.4;
+        word-wrap: break-word;
+        max-width: 90%;
+      }
+
+      .messages li .avatar {
+        position: absolute;
+        top: 0;
+        width: var(--chat-thread-avatar-size);
+        height: var(--chat-thread-avatar-size);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 4px;
+      }
+
+      .messages li .avatar svg {
+        width: 100%;
+        height: 100%;
+        color: white;
+      }
+
+      /* User Message (Self) - Using Intercom style "other" from codepen */
+      .messages li.self {
+        align-self: flex-end;
+        margin-right: var(--chat-thread-offset);
+        color: white;
+        background-color: var(--chat-thread-bgd-color);
+        border-radius: 10px;
+        animation: show-chat-odd 0.15s 1 ease-in;
+      }
+
+      .messages li.self .avatar {
+        right: calc(-1 * var(--chat-thread-offset));
+      }
+
+      .messages li.self:after {
+        position: absolute;
+        top: 10px;
+        content: "";
+        width: 0;
+        height: 0;
+        border-top: 10px solid var(--chat-thread-bgd-color);
+        border-right: 10px solid transparent;
+        right: -10px;
+      }
+
+      /* AI Message (Other) - Using Intercom style "self" from codepen but no bubble */
+      .messages li.other {
+        align-self: flex-start;
+        margin-left: var(--chat-thread-offset);
+        color: white;
+        background-color: transparent; /* No bubble for AI */
+        padding: 0;
+        animation: show-chat-even 0.15s 1 ease-in;
+      }
+
+      .messages li.other .avatar {
+        left: calc(-1 * var(--chat-thread-offset));
+      }
+
+      .messages li.other .content {
+        padding: 0;
+      }
+
+      .footer {
+        flex-shrink: 0;
+        display: flex;
+        padding-top: 10px;
+        max-height: 90px;
+        background: transparent;
+        gap: 5px;
+      }
+
+      .footer textarea {
+        flex: 1;
+        border-radius: 3px;
+        background: var(--chat-thread-bgd-color);
+        border: none;
+        color: white;
+        padding: 8px;
+        font-family: inherit;
+        font-size: 12px;
+        resize: none;
+        outline: none;
+      }
+
+      .footer button {
+        background: transparent;
+        border: 0;
+        color: white;
+        text-transform: uppercase;
+        border-radius: 3px;
+        cursor: pointer;
+        padding: 0 10px;
+        font-weight: bold;
+      }
+
+      .footer button:hover {
+        color: white;
+        opacity: 0.8;
       }
 
       .empty {
         text-align: center;
-        color: #888;
+        color: rgba(255, 255, 255, 0.5);
         margin-top: 40px;
-        font-size: 14px;
-      }
-
-      .message {
-        display: flex;
-        width: 100%;
-      }
-      .message.user {
-        justify-content: flex-end;
-      }
-
-      .bubble {
-        max-width: 80%;
-        padding: 10px 14px;
-        border-radius: 18px;
-        font-size: 14px;
-        line-height: 1.4;
-        white-space: pre-wrap;
-      }
-
-      .user .bubble {
-        background: var(--radikari-accent);
-        color: white;
-        border-bottom-right-radius: 4px;
-      }
-      .assistant .bubble {
-        background: white;
-        color: var(--radikari-text);
-        border-bottom-left-radius: 4px;
-        border: 1px solid #eee;
-      }
-
-      .input-area {
-        padding: 12px;
-        display: flex;
-        gap: 8px;
-        background: white;
-        border-top: 1px solid #eee;
-      }
-
-      textarea {
-        flex: 1;
-        border: 1px solid #eee;
-        border-radius: 8px;
-        padding: 8px;
-        resize: none;
-        height: 40px;
-        font-family: inherit;
-        outline: none;
-      }
-
-      textarea:focus {
-        border-color: var(--radikari-accent);
-      }
-
-      .send {
-        background: var(--radikari-accent);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        width: 40px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .send:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+        font-size: 12px;
       }
 
       .error {
         color: #ff4d4f;
-        font-size: 12px;
+        font-size: 11px;
         text-align: center;
+        padding: 10px;
+      }
+
+      @keyframes show-chat-even {
+        0% {
+          margin-left: -480px;
+        }
+        100% {
+          margin-left: var(--chat-thread-offset);
+        }
+      }
+
+      @keyframes show-chat-odd {
+        0% {
+          margin-right: -480px;
+        }
+        100% {
+          margin-right: var(--chat-thread-offset);
+        }
       }
     `,
   ];
