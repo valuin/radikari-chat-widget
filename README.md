@@ -49,7 +49,7 @@ yarn add radikari-chat-widget
     <script type="module" src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@latest/dist/radikari-chat.es.js"></script>
 </head>
 <body>
-    <radikari-chat tenant-id="YOUR_TENANT_ID"> </radikari-chat>
+    <radikari-chat tenant-id="YOUR_TENANT_ID" theme="light"> </radikari-chat>
 </body>
 </html>
 ```

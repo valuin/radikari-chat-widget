@@ -14,6 +14,7 @@ export class RadikariChat extends LitElement {
   @property({ type: String, attribute: "tenant-id" }) tenantId = "";
   @property({ type: String }) lang: "id" | "en" = "id";
   @property({ type: Boolean }) inline = false;
+  @property({ type: String }) theme: "light" | "dark" = "light";
 
   @state() private messages: ChatMessage[] = [];
   @state() private isStreaming = false;
@@ -244,7 +245,7 @@ export class RadikariChat extends LitElement {
       <div
         class="floating-chat ${this.isEntering ? "enter" : ""} ${this.isExpanded
           ? "expand"
-          : ""} ${this.inline ? "inline" : ""}"
+          : ""} ${this.inline ? "inline" : ""} theme-${this.theme}"
       >
         ${isFloating && !this.isExpanded
           ? html`
@@ -382,6 +383,40 @@ export class RadikariChat extends LitElement {
         z-index: 9999;
       }
 
+      /* Theme Variables */
+      .floating-chat.theme-light {
+        --chat-bg-gradient: linear-gradient(to bottom, #ffffff, #f0f2f5);
+        --chat-header-text: #183850;
+        --chat-msg-self-bg: rgba(25, 147, 147, 0.1);
+        --chat-msg-self-text: #183850;
+        --chat-msg-other-text: #192c46;
+        --chat-footer-bg: #f9f9f9;
+        --chat-input-bg: #ffffff;
+        --chat-input-text: #183850;
+        --chat-icon-color: #183850;
+        --chat-trigger-bg: linear-gradient(-45deg, #183850 0, #192c46 100%);
+      }
+
+      .floating-chat.theme-dark {
+        --chat-bg-gradient: linear-gradient(
+          -45deg,
+          #183850 0,
+          #183850 25%,
+          #192c46 50%,
+          #22254c 75%,
+          #22254c 100%
+        );
+        --chat-header-text: white;
+        --chat-msg-self-bg: rgba(25, 147, 147, 0.2);
+        --chat-msg-self-text: white;
+        --chat-msg-other-text: white;
+        --chat-footer-bg: transparent;
+        --chat-input-bg: rgba(25, 147, 147, 0.2);
+        --chat-input-text: white;
+        --chat-icon-color: white;
+        --chat-trigger-bg: linear-gradient(-45deg, #183850 0, #22254c 100%);
+      }
+
       * {
         box-sizing: border-box;
       }
@@ -401,14 +436,7 @@ export class RadikariChat extends LitElement {
         transition: all 250ms ease-out;
         border-radius: 50%;
         opacity: 0;
-        background: linear-gradient(
-          -45deg,
-          #183850 0,
-          #183850 25%,
-          #192c46 50%,
-          #22254c 75%,
-          #22254c 100%
-        );
+        background: var(--chat-trigger-bg);
         box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12),
           0px 1px 2px rgba(0, 0, 0, 0.14);
       }
@@ -443,6 +471,7 @@ export class RadikariChat extends LitElement {
         border-radius: 12px;
         cursor: auto;
         opacity: 1;
+        background: var(--chat-bg-gradient);
       }
 
       .trigger-icon {
@@ -480,12 +509,13 @@ export class RadikariChat extends LitElement {
         font-weight: bold;
         text-transform: uppercase;
         padding: 0 5px;
+        color: var(--chat-header-text);
       }
 
       .header button {
         background: transparent;
         border: 0;
-        color: white;
+        color: var(--chat-header-text);
         cursor: pointer;
         padding: 5px;
         display: flex;
@@ -547,15 +577,15 @@ export class RadikariChat extends LitElement {
       .messages li .avatar svg {
         width: 100%;
         height: 100%;
-        color: white;
+        color: var(--chat-icon-color);
       }
 
       /* User Message (Self) - Using Intercom style "other" from codepen */
       .messages li.self {
         align-self: flex-end;
         margin-right: var(--chat-thread-offset);
-        color: white;
-        background-color: var(--chat-thread-bgd-color);
+        color: var(--chat-msg-self-text);
+        background-color: var(--chat-msg-self-bg);
         border-radius: 10px;
         animation: show-chat-odd 0.15s 1 ease-in;
       }
@@ -570,7 +600,7 @@ export class RadikariChat extends LitElement {
         content: "";
         width: 0;
         height: 0;
-        border-top: 10px solid var(--chat-thread-bgd-color);
+        border-top: 10px solid var(--chat-msg-self-bg);
         border-right: 10px solid transparent;
         right: -10px;
       }
@@ -579,7 +609,7 @@ export class RadikariChat extends LitElement {
       .messages li.other {
         align-self: flex-start;
         margin-left: var(--chat-thread-offset);
-        color: white;
+        color: var(--chat-msg-other-text);
         background-color: transparent; /* No bubble for AI */
         padding: 0;
         animation: show-chat-even 0.15s 1 ease-in;
@@ -598,16 +628,16 @@ export class RadikariChat extends LitElement {
         display: flex;
         padding-top: 10px;
         max-height: 90px;
-        background: transparent;
+        background: var(--chat-footer-bg);
         gap: 5px;
       }
 
       .footer textarea {
         flex: 1;
         border-radius: 3px;
-        background: var(--chat-thread-bgd-color);
-        border: none;
-        color: white;
+        background: var(--chat-input-bg);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: var(--chat-input-text);
         padding: 8px;
         font-family: inherit;
         font-size: 12px;
@@ -615,10 +645,15 @@ export class RadikariChat extends LitElement {
         outline: none;
       }
 
+      .theme-dark .footer textarea {
+        border: none;
+        background: var(--chat-input-bg);
+      }
+
       .footer button {
         background: transparent;
         border: 0;
-        color: white;
+        color: var(--chat-header-text);
         text-transform: uppercase;
         border-radius: 3px;
         cursor: pointer;
@@ -627,7 +662,6 @@ export class RadikariChat extends LitElement {
       }
 
       .footer button:hover {
-        color: white;
         opacity: 0.8;
       }
 
