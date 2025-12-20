@@ -151,7 +151,6 @@ npm publish
 <body>
     <radikari-chat
         tenant-id="YOUR_TENANT_ID"
-        api-base-url="https://your-api.com"
         inline
     ></radikari-chat>
 

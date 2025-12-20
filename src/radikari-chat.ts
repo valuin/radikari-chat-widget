@@ -12,7 +12,6 @@ import { themeTokens } from "./styles/tokens";
 @customElement("radikari-chat")
 export class RadikariChat extends LitElement {
   @property({ type: String, attribute: "tenant-id" }) tenantId = "";
-  @property({ type: String, attribute: "api-base-url" }) apiBaseUrl = "";
   @property({ type: String }) lang: "id" | "en" = "id";
   @property({ type: Boolean }) inline = false;
 
@@ -21,6 +20,18 @@ export class RadikariChat extends LitElement {
   @state() private error: string | null = null;
   @state() private isOpen = false;
   @state() private inputValue = "";
+
+  // Internal API base URL - not exposed as a prop
+  private get apiBaseUrl(): string {
+    const isDevelopment =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1" ||
+      window.location.hostname.includes("dev");
+
+    return isDevelopment
+      ? "http://localhost:3010"
+      : "https://radikari-be.withsummon.com";
+  }
 
   @query("textarea") private!: HTMLTextAreaElement;
 
@@ -285,6 +296,8 @@ export class RadikariChat extends LitElement {
         position: fixed;
         bottom: 20px;
         right: 20px;
+        width: auto;
+        height: auto;
       }
 
       .trigger {
@@ -317,6 +330,11 @@ export class RadikariChat extends LitElement {
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         overflow: hidden;
         border: 1px solid #eee;
+        /* Ensure fixed size in floating mode */
+        max-width: 360px;
+        max-height: 500px;
+        min-width: 360px;
+        min-height: 500px;
       }
 
       .wrapper.open .container {
@@ -331,6 +349,11 @@ export class RadikariChat extends LitElement {
         box-shadow: none;
         border: 1px solid #eee;
         width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        min-width: auto;
+        min-height: auto;
         flex: 1; /* Take all available space in the wrapper */
       }
 
@@ -349,10 +372,19 @@ export class RadikariChat extends LitElement {
         flex: 1;
         padding: 16px;
         overflow-y: auto;
+        overflow-x: hidden;
         display: flex;
         flex-direction: column;
         gap: var(--_msg-gap);
         background: #f9f9f9;
+        /* Ensure messages container has a defined height for scrolling */
+        max-height: calc(
+          500px - 120px
+        ); /* container height minus header and input area */
+      }
+
+      .wrapper.inline .messages {
+        max-height: none; /* Remove max-height constraint in inline mode */
       }
 
       .empty {

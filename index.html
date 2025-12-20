@@ -11,6 +11,7 @@
         padding: 20px;
         font-family: sans-serif;
         background: #f0f2f5;
+        min-height: 100vh;
       }
       .test-container {
         max-width: 400px;
@@ -18,20 +19,20 @@
         background: white;
         border-radius: 12px;
         overflow: hidden;
+        padding: 20px;
+      }
+
+      /* Ensure the chat widget can float properly */
+      radikari-chat {
+        position: relative;
+        z-index: 1000;
       }
     </style>
-    <script
-      type="module"
-      src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@1.0.0/dist/radikari-chat.umd.js"
-    ></script>
+    <script type="module" src="./src/radikari-chat.ts"></script>
   </head>
   <body>
     <div class="test-container">
-      <radikari-chat
-        tenant-id="01K9201Z97H20E4NKTEANCFVCP"
-        api-base-url="https://radikari-be.withsummon.com"
-        inline
-      ></radikari-chat>
+      <radikari-chat tenant-id="01K9201Z97H20E4NKTEANCFVCP"></radikari-chat>
     </div>
   </body>
 </html>

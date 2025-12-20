@@ -49,11 +49,7 @@ yarn add radikari-chat-widget
     <script type="module" src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@latest/dist/radikari-chat.es.js"></script>
 </head>
 <body>
-    <radikari-chat
-        tenant-id="YOUR_TENANT_ID"
-        api-base-url="https://your-api-domain.com"
-        inline>
-    </radikari-chat>
+    <radikari-chat tenant-id="YOUR_TENANT_ID"> </radikari-chat>
 </body>
 </html>
 ```
@@ -69,7 +65,6 @@ yarn add radikari-chat-widget
 | Attribute | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
 | `tenant-id` | string | ✅ | - | Your tenant ID |
-| `api-base-url` | string | ✅ | - | API base URL |
 | `lang` | string | ❌ | `"id"` | Language: `"id"` or `"en"` |
 | `inline` | boolean | ❌ | `false` | Display inline or as floating widget |
 

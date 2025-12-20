@@ -151,7 +151,6 @@ function showCdnInstructions(packageName, version) {
   );
   log(`<radikari-chat`);
   log(`  tenant-id="YOUR_TENANT_ID"`);
-  log(`  api-base-url="https://your-api.com"`);
   log(`  inline></radikari-chat>`);
   log("");
   log(

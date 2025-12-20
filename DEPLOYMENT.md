@@ -126,7 +126,6 @@ yarn add radikari-chat-widget@1.0.0
 | Attribute | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
 | `tenant-id` | string | ✅ | - | Your tenant ID |
-| `api-base-url` | string | ✅ | - | API base URL |
 | `lang` | string | ❌ | `"id"` | Language: `"id"` or `"en"` |
 | `inline` | boolean | ❌ | `false` | Display inline or as floating widget |
 
