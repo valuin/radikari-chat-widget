@@ -20,7 +20,6 @@ export class RadikariChat extends LitElement {
   @state() private messages: ChatMessage[] = [];
   @state() private isStreaming = false;
   @state() private error: string | null = null;
-  @state() private isOpen = false;
   @state() private isEntering = false;
   @state() private isExpanded = false;
   @state() private inputValue = "";
@@ -61,7 +60,9 @@ export class RadikariChat extends LitElement {
       apiBaseUrl: this.apiBaseUrl,
       inline: this.inline,
     });
-    this.isOpen = this.inline;
+    if (this.inline) {
+      this.isExpanded = true;
+    }
 
     // Simulate the 'enter' animation from codepen
     setTimeout(() => {
@@ -85,7 +86,6 @@ export class RadikariChat extends LitElement {
 
   private _openChat() {
     this.isExpanded = true;
-    this.isOpen = true;
     setTimeout(() => {
       this.textarea?.focus();
     }, 250);
@@ -93,10 +93,6 @@ export class RadikariChat extends LitElement {
 
   private _closeChat() {
     this.isExpanded = false;
-    // Delay setting isOpen to false to allow exit animation if any
-    setTimeout(() => {
-      this.isOpen = false;
-    }, 250);
   }
 
   private _handleInput(e: InputEvent) {
