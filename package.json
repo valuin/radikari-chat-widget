@@ -44,7 +44,8 @@
     "access": "public"
   },
   "dependencies": {
-    "lit": "^3.3.1"
+    "lit": "^3.3.1",
+    "snarkdown": "^2.0.0"
   },
   "devDependencies": {
     "typescript": "~5.9.3",

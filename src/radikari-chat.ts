@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, state, query } from "lit/decorators.js";
+import snarkdown from "snarkdown";
 import { ApiClient, ApiError } from "./lib/api";
 import type { ChatMessage } from "./lib/api";
 import { Storage } from "./lib/storage";
@@ -39,6 +40,19 @@ export class RadikariChat extends LitElement {
   @query("textarea") private textarea!: HTMLTextAreaElement;
 
   private abortController: AbortController | null = null;
+
+  /**
+   * Parse markdown content to HTML using snarkdown
+   */
+  private parseMarkdown(content: string): string {
+    if (!content) return "";
+    try {
+      return snarkdown(content);
+    } catch (error) {
+      console.warn("Failed to parse markdown:", error);
+      return content; // Return original content if parsing fails
+    }
+  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -338,8 +352,13 @@ export class RadikariChat extends LitElement {
                         `}
                   </div>
                   <div class="content">
-                    ${m.content ||
-                    (this.isStreaming && m.role === "assistant" ? "..." : "")}
+                    ${m.content
+                      ? html`<div
+                          .innerHTML=${this.parseMarkdown(m.content)}
+                        ></div>`
+                      : this.isStreaming && m.role === "assistant"
+                      ? "..."
+                      : ""}
                   </div>
                 </li>
               `
@@ -677,6 +696,107 @@ export class RadikariChat extends LitElement {
         font-size: 11px;
         text-align: center;
         padding: 10px;
+      }
+
+      /* Markdown Content Styling */
+      .content p {
+        margin: 0 0 8px 0;
+        line-height: 1.5;
+      }
+
+      .content p:last-child {
+        margin-bottom: 0;
+      }
+
+      .content strong {
+        font-weight: bold;
+        color: var(--chat-msg-other-text);
+      }
+
+      .content em {
+        font-style: italic;
+      }
+
+      .content code {
+        background: rgba(25, 147, 147, 0.1);
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-family: "Courier New", monospace;
+        font-size: 11px;
+        color: var(--chat-msg-other-text);
+      }
+
+      .content pre {
+        background: rgba(25, 147, 147, 0.05);
+        border: 1px solid rgba(25, 147, 147, 0.2);
+        border-radius: 4px;
+        padding: 8px;
+        margin: 8px 0;
+        overflow-x: auto;
+        font-family: "Courier New", monospace;
+        font-size: 11px;
+        line-height: 1.4;
+      }
+
+      .content pre code {
+        background: none;
+        padding: 0;
+        border-radius: 0;
+        font-size: inherit;
+      }
+
+      .content ul,
+      .content ol {
+        margin: 8px 0;
+        padding-left: 20px;
+      }
+
+      .content li {
+        margin: 4px 0;
+        line-height: 1.4;
+      }
+
+      .content blockquote {
+        border-left: 3px solid rgba(25, 147, 147, 0.3);
+        padding-left: 12px;
+        margin: 8px 0;
+        font-style: italic;
+        color: var(--chat-msg-other-text);
+      }
+
+      .content a {
+        color: rgba(25, 147, 147, 0.8);
+        text-decoration: none;
+      }
+
+      .content a:hover {
+        text-decoration: underline;
+      }
+
+      .content h1,
+      .content h2,
+      .content h3,
+      .content h4,
+      .content h5,
+      .content h6 {
+        margin: 12px 0 8px 0;
+        font-weight: bold;
+        color: var(--chat-msg-other-text);
+      }
+
+      .content h1 {
+        font-size: 14px;
+      }
+      .content h2 {
+        font-size: 13px;
+      }
+      .content h3 {
+        font-size: 12px;
+      }
+      .content h4,
+      .content h5,
+      .content h6 {
+        font-size: 12px;
       }
 
       @keyframes show-chat-even {
