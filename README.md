@@ -45,7 +45,7 @@ yarn add radikari-chat-widget
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Use @latest for latest features or @1.0.1 for stability -->
+    <!-- Use @latest for latest features or @1.0.5 for stability -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/radikari-chat-widget@latest/dist/radikari-chat.es.js"></script>
 </head>
 <body>
